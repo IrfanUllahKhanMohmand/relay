@@ -6,16 +6,16 @@ import '../../domain/entities/user.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  static final _demoHost = User(
-    id: 'user-scaffold',
-    displayName: 'Scaffold',
+  static final _host = User(
+    id: 'user-maya',
+    displayName: 'Maya',
     createdAt: DateTime.utc(2026, 9, 4),
   );
 
-  static final _demoRoom = Room(
+  static final _room = Room(
     id: 'room-lobby',
     name: 'Lobby',
-    hostId: _demoHost.id,
+    hostId: _host.id,
     createdAt: DateTime.utc(2026, 9, 4),
   );
 
@@ -34,14 +34,13 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Join a room, chat, and see who is present. '
-              'Auth and sockets come next.',
+              'Join a room, chat, and see who is in there with you.',
             ),
             const SizedBox(height: 24),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(_demoRoom.name),
-              subtitle: Text('Host: ${_demoHost.displayName}'),
+              title: Text(_room.name),
+              subtitle: Text('Host: ${_host.displayName}'),
             ),
           ],
         ),

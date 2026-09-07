@@ -1,21 +1,12 @@
 # Relay
 
-Live rooms: create a room, join, chat, and see who is present. This is a full-stack sample (Flutter + Node), not a marketplace or swap board.
+Create a room, invite people in, and chat while you can see who is online.
 
-## Status
+Flutter client with a Node.js API. MongoDB for persistence. Docker Compose for local services.
 
-Scaffold (4 Sep 2026): repo layout, core models, Docker Compose stub. Auth, WebSockets, and the Flutter client come on later weekdays.
+## Run
 
-## Layout
-
-```
-apps/api      TypeScript + Express (Mongo later)
-apps/mobile   Flutter (iOS, Android, web)
-```
-
-## Run locally
-
-**API** (no Mongo required for this scaffold):
+API:
 
 ```bash
 cd apps/api
@@ -24,13 +15,13 @@ npm install
 npm run dev
 ```
 
-**Compose** (Mongo + API image):
+API + Mongo:
 
 ```bash
 docker compose up --build
 ```
 
-**Mobile:**
+Mobile (iOS, Android, or web):
 
 ```bash
 cd apps/mobile
@@ -38,12 +29,9 @@ flutter pub get
 flutter run
 ```
 
-## Models
+## Repo
 
-- `User` — id, display name
-- `Room` — named room with a host
-- `Message` — chat line in a room
-
-## v1 target
-
-Login, create/join room, chat, presence, reconnect, Compose, API CI.
+```
+apps/api      Express, TypeScript
+apps/mobile   Flutter
+```

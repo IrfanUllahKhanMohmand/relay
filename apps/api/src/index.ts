@@ -8,13 +8,12 @@ app.use(express.json());
 app.get("/", (_req, res) => {
   res.json({
     name: "relay-api",
-    status: "scaffold",
-    models: ["User", "Room", "Message"],
+    status: "ok",
   });
 });
 
 app.listen(port, () => {
-  const demoHost = createUser({ displayName: "scaffold" });
+  const demoHost = createUser({ displayName: "Maya" });
   const demoRoom = createRoom({ name: "lobby", hostId: demoHost.id });
   console.log(`Relay API listening on ${port} (demo room ${demoRoom.id})`);
 });
