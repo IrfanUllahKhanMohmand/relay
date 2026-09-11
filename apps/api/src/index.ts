@@ -1,19 +1,10 @@
-import express from "express";
-import { createRoom, createUser } from "./models/index.js";
+import { createApp } from "./app.js";
+import { UserStore } from "./store/user-store.js";
 
 const port = Number(process.env.PORT ?? 3000);
-const app = express();
-app.use(express.json());
+const store = new UserStore();
+store.create("Maya");
 
-app.get("/", (_req, res) => {
-  res.json({
-    name: "relay-api",
-    status: "ok",
-  });
-});
-
-app.listen(port, () => {
-  const demoHost = createUser({ displayName: "Maya" });
-  const demoRoom = createRoom({ name: "lobby", hostId: demoHost.id });
-  console.log(`Relay API listening on ${port} (demo room ${demoRoom.id})`);
+createApp(store).listen(port, () => {
+  console.log(`Relay API listening on ${port}`);
 });

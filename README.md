@@ -2,7 +2,7 @@
 
 Create a room, invite people in, and chat while you can see who is online.
 
-Flutter client with a Node.js API. MongoDB for persistence. Docker Compose for local services.
+Flutter client with a Node.js API. Docker Compose can start Mongo beside the API.
 
 ## Run
 
@@ -29,9 +29,19 @@ flutter pub get
 flutter run
 ```
 
+## API
+
+```
+GET  /health
+GET  /users
+GET  /users/:id
+POST /users   { "displayName": "Maya" }
+```
+
 ## Repo
 
 ```
 apps/api      Express, TypeScript
 apps/mobile   Flutter
 ```
+
