@@ -34,8 +34,11 @@ flutter run
 ```
 GET  /health
 GET  /users
+GET  /users/me
 GET  /users/:id
-POST /users   { "displayName": "Maya" }
+POST /users            { "displayName": "Maya" }
+POST /auth/register    { "displayName": "Maya", "password": "at-least-8" }
+POST /auth/login       { "displayName": "Maya", "password": "at-least-8" }
 ```
 
 ## Repo
