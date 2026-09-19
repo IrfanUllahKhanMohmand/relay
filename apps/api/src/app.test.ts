@@ -1,9 +1,12 @@
 import assert from "node:assert/strict";
+import { once } from "node:events";
 import { describe, it } from "node:test";
 import request from "supertest";
+import { WebSocket } from "ws";
 
 import { createApp } from "./app.js";
 import { secretFrom } from "./auth/token.js";
+import { createRelayServer } from "./server.js";
 import { UserStore } from "./store/user-store.js";
 
 const jwtSecret = secretFrom("test-secret");
@@ -80,5 +83,54 @@ describe("auth", () => {
       password: "wrong-password",
     });
     assert.equal(login.status, 401);
+  });
+});
+
+describe("websocket handshake", () => {
+  it("greets an authenticated client", async () => {
+    const store = new UserStore();
+    const { app: api, server } = createRelayServer({ store, jwtSecret });
+    server.listen(0);
+    await once(server, "listening");
+    const address = server.address();
+    assert.ok(address && typeof address === "object");
+
+    const registered = await request(api).post("/auth/register").send({
+      displayName: "Maya",
+      password: "password12",
+    });
+    const token = registered.body.token as string;
+
+    const socket = new WebSocket(
+      `ws://127.0.0.1:${address.port}/ws?token=${encodeURIComponent(token)}`,
+    );
+    const [raw] = (await once(socket, "message")) as [Buffer | string];
+    const message = JSON.parse(String(raw)) as {
+      type: string;
+      displayName: string;
+    };
+    assert.equal(message.type, "hello");
+    assert.equal(message.displayName, "Maya");
+    socket.close();
+    await once(socket, "close");
+    server.close();
+    await once(server, "close");
+  });
+
+  it("rejects a missing token", async () => {
+    const { server } = createRelayServer({
+      store: new UserStore(),
+      jwtSecret,
+    });
+    server.listen(0);
+    await once(server, "listening");
+    const address = server.address();
+    assert.ok(address && typeof address === "object");
+
+    const socket = new WebSocket(`ws://127.0.0.1:${address.port}/ws`);
+    const [code] = (await once(socket, "close")) as [number];
+    assert.equal(code, 4401);
+    server.close();
+    await once(server, "close");
   });
 });
